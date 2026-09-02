@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto Ares - Colonização de Marte</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        martian: {
+                            dark: '#0e0505',
+                            card: '#1b0a0a',
+                            border: '#421614',
+                            red: '#8b261d',
+                            rust: '#c04a26',
+                            orange: '#d96b43',
+                            amber: '#f2994a',
+                            sand: '#e6c5b0'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0e0505;
+            color: #e6c5b0;
+            font-family: 'Rajdhani', sans-serif;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(192, 74, 38, 0.15), transparent 70%),
+                radial-gradient(circle at 80% 50%, rgba(139, 38, 29, 0.1), transparent 50%);
+        }
+
+        .heading-font {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Glassmorphism terroso */
+        .martian-glass {
+            background: rgba(27, 10, 10, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(192, 74, 38, 0.25);
+        }
+
+        .martian-glass:hover {
+            border-color: rgba(242, 153, 74, 0.5);
+            box-shadow: 0 0 20px rgba(192, 74, 38, 0.2);
+        }
+
+        .martian-glow {
+            text-shadow: 0 0 12px rgba(217, 107, 67, 0.6);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0e0505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b261d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d96b43;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col selection:bg-martian-rust selection:text-white">
+
+    <!-- Header / Navegação -->
+    <header class="fixed top-0 left-0 w-full z-50 martian-glass border-b border-martian-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <i data-lucide="globe" class="w-8 h-8 text-martian-orange animate-pulse"></i>
+                <span class="heading-font text-xl font-extrabold tracking-wider text-white">COLÔNIA <span class="text-martian-amber">ARES-1</span></span>
+            </div>
+
+            <!-- Desktop Nav -->
+            <nav class="hidden md:flex space-x-8 heading-font text-sm font-semibold tracking-wide">
+                <a href="#clima" class="hover:text-martian-amber transition-colors flex items-center gap-2"><i data-lucide="thermometer-snowflake" class="w-4 h-4"></i> Clima</a>
+                <a href="#habitats" class="hover:text-martian-amber transition-colors flex items-center gap-2"><i data-lucide="shield" class="w-4 h-4"></i> Habitats</a>
+                <a href="#alimentacao" class="hover:text-martian-amber transition-colors flex items-center gap-2"><i data-lucide="sprout" class="w-4 h-4"></i> Nutrição</a>
+                <a href="#trajes" class="hover:text-martian-amber transition-colors flex items-center gap-2"><i data-lucide="user-check" class="w-4 h-4"></i> Trajes</a>
+            </nav>
+
+            <div class="hidden lg:flex items-center gap-2 bg-martian-red/20 border border-martian-rust/40 px-3 py-1.5 rounded-full text-xs font-mono text-martian-sand">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                SOL 1420 - BASE CRATERA GALE
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="md:hidden text-martian-sand hover:text-white">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Nav Menu -->
+        <div id="mobile-menu" class="hidden md:hidden martian-glass border-b border-martian-border px-4 pt-2 pb-4 space-y-3 font-semibold">
+            <a href="#clima" class="block hover:text-martian-amber py-1">Clima de Marte</a>
+            <a href="#habitats" class="block hover:text-martian-amber py-1">Habitats e Proteção</a>
+            <a href="#alimentacao" class="block hover:text-martian-amber py-1">Produção de Alimentos</a>
+            <a href="#trajes" class="block hover:text-martian-amber py-1">Design de Trajes</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 md:pt-44 md:pb-32 overflow-hidden flex items-center justify-center min-h-screen">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&w=1920&q=80" 
+                 alt="[Superfície de Marte]" 
+                 class="w-full h-full object-cover opacity-30 filter contrast-125"
+                 onerror="this.src='https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1920&q=80'">
+            <div class="absolute inset-0 bg-gradient-to-t from-martian-dark via-martian-dark/60 to-transparent"></div>
+        </div>
+
+        <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full martian-glass border-martian-rust/50 text-martian-amber text-sm font-semibold mb-6">
+                <i data-lucide="rocket" class="w-4 h-4"></i> Plano Diretor de Terrafomação & Colonização
+            </div>
+            <h1 class="heading-font text-4xl sm:text-6xl md:text-7xl font-extrabold text-white tracking-tight leading-none mb-6">
+                ORGANIZANDO A VIDA EM <span class="text-transparent bg-clip-text bg-gradient-to-r from-martian-orange via-martian-amber to-amber-200 martian-glow">MARTE</span>
+            </h1>
+            <p class="text-lg sm:text-2xl text-martian-sand/90 max-w-3xl mx-auto font-light leading-relaxed mb-10">
+                Guia técnico e operacional para a sobrevivência humana, engenharia de proteção contra radiação, agricultura sustentável e design ambiental no Planeta Vermelho.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="#clima" class="px-8 py-4 rounded-lg bg-gradient-to-r from-martian-red to-martian-rust hover:from-martian-rust hover:to-martian-orange text-white font-bold heading-font tracking-wider transition duration-300 shadow-lg shadow-martian-red/30 flex items-center justify-center gap-2">
+                    EXPLORAR DADOS DA MISSÃO <i data-lucide="arrow-down" class="w-5 h-5"></i>
+                </a>
+                <a href="#habitats" class="px-8 py-4 rounded-lg martian-glass hover:bg-martian-red/20 text-martian-sand font-bold heading-font tracking-wider border border-martian-rust/40 transition duration-300 flex items-center justify-center gap-2">
+                    ARQUITETURA DE HABITATS
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 1: CLIMA DE MARTE -->
+    <section id="clima" class="py-20 relative z-10 border-t border-martian-border/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="heading-font text-3xl sm:text-4xl font-bold text-white mb-4">
+                    <span class="text-martian-orange">01.</span> CLIMA & AMBIENTE EXTREMO
+                </h2>
+                <div class="h-1 w-20 bg-martian-rust mx-auto mb-6"></div>
+                <p class="text-martian-sand/80 text-lg">
+                    Marte é um deserto gélido e hiperárido. Entender suas variáveis climáticas é crucial para garantir a integridade dos colonos e das estruturas.
+                </p>
+            </div>
+
+            <!-- Dashboard Climatológico Interativo -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-martian-sand/70 font-mono text-sm">TEMPERATURA MÉDIA</span>
+                        <i data-lucide="thermometer" class="w-6 h-6 text-martian-amber"></i>
+                    </div>
+                    <div class="text-3xl font-bold heading-font text-white mb-2" id="temp-display">-63°C</div>
+                    <p class="text-xs text-martian-sand/60">Variações de -125°C no inverno a +20°C no verão no equador.</p>
+                </div>
+
+                <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-martian-sand/70 font-mono text-sm">PRESSÃO ATMOSFÉRICA</span>
+                        <i data-lucide="gauge" class="w-6 h-6 text-martian-orange"></i>
+                    </div>
+                    <div class="text-3xl font-bold heading-font text-white mb-2">6.1 mbar</div>
+                    <p class="text-xs text-martian-sand/60">Menos de 1% da pressão terrestre. Exige habitats pressurizados.</p>
+                </div>
+
+                <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-martian-sand/70 font-mono text-sm">COMPOSIÇÃO DO AR</span>
+                        <i data-lucide="wind" class="w-6 h-6 text-martian-rust"></i>
+                    </div>
+                    <div class="text-3xl font-bold heading-font text-white mb-2">95.3% CO₂</div>
+                    <p class="text-xs text-martian-sand/60">Contém vestígios de Nitrogênio (2.6%) e Argônio (1.9%). Sem O₂ livre.</p>
+                </div>
+
+                <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-martian-sand/70 font-mono text-sm">RADIAÇÃO NA SUPERFÍCIE</span>
+                        <i data-lucide="sun-dim" class="w-6 h-6 text-red-500"></i>
+                    </div>
+                    <div class="text-3xl font-bold heading-font text-white mb-2">240-300 mSv/ano</div>
+                    <p class="text-xs text-martian-sand/60">Sem campo magnético global. Nível ~13x superior ao limite seguro.</p>
+                </div>
+            </div>
+
+            <!-- Card Detalhado de Tempestades de Poeira -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center martian-glass p-8 rounded-2xl border border-martian-border">
+                <div>
+                    <span class="text-martian-amber font-mono text-sm tracking-widest uppercase">Alerta Ambiental</span>
+                    <h3 class="heading-font text-2xl font-bold text-white mt-1 mb-4">Tempestades Globais de Poeira (Dust Storms)</h3>
+                    <p class="text-martian-sand/80 mb-4 leading-relaxed">
+                        Periodicamente, partículas finas de óxido de ferro são suspensas por ventos que atingem até 100 km/h, cobrindo o planeta inteiro por semanas ou meses.
+                    </p>
+                    <ul class="space-y-3 mb-6 font-medium text-martian-sand">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="alert-triangle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                            <span>Bloqueio de até 99% da luz solar (inviabiliza painéis solares convencionais).</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="zap" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                            <span>Aumento de eletricidade estática no regolito fino abrasivo.</span>
+                        </li>
+                    </ul>
+                    <button onclick="toggleStormSim()" class="px-5 py-2.5 rounded bg-martian-rust/30 border border-martian-rust hover:bg-martian-rust text-white font-semibold text-sm transition">
+                        Simular Impacto no Painel Solar
+                    </button>
+                </div>
+                <div class="relative rounded-xl overflow-hidden border border-martian-border h-64 sm:h-80">
+                    <img id="storm-img" src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1000&q=80" 
+                         alt="[Tempestade de Poeira em Marte]" 
+                         class="w-full h-full object-cover transition duration-700">
+                    <div id="storm-overlay" class="absolute inset-0 bg-martian-rust/20 opacity-0 transition duration-700 flex items-center justify-center p-4 text-center">
+                        <span class="bg-martian-dark/90 px-4 py-2 rounded text-martian-amber font-mono border border-martian-amber">
+                            SISTEMA SOLAR OPERANDO EM 12% DA CAPACIDADE
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 2: HOUSES / HABITATS & PROTEÇÃO -->
+    <section id="habitats" class="py-20 bg-martian-card/30 relative z-10 border-t border-martian-border/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="heading-font text-3xl sm:text-4xl font-bold text-white mb-4">
+                    <span class="text-martian-orange">02.</span> ARQUITETURA & PROTEÇÃO DE HABITATS
+                </h2>
+                <div class="h-1 w-20 bg-martian-rust mx-auto mb-6"></div>
+                <p class="text-martian-sand/80 text-lg">
+                    As casas em Marte não são apenas abrigos; são sistemas de suporte de vida blindados contra radiação cósmica, micrometeoritos e congelamento.
+                </p>
+            </div>
+
+            <!-- Grid de Módulos Habitacionais -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                <!-- Modelo 1: Impressão 3D de Regolito -->
+                <div class="martian-glass rounded-2xl overflow-hidden border border-martian-border flex flex-col">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80" 
+                             alt="[Domo de Regolito Impresso em 3D]" 
+                             class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-martian-dark/80 px-3 py-1 rounded text-xs font-mono text-martian-amber border border-martian-rust/40">
+                            TECNOLOGIA 3D PRINT
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="heading-font text-xl font-bold text-white mb-2">Domos de Regolito Fundido</h3>
+                            <p class="text-martian-sand/70 text-sm mb-4 leading-relaxed">
+                                Robôs autônomos escavam o solo marciano e utilizam lasers/micro-ondas para sinterizar o regolito, criando espessas conchas de proteção geotérmica e antirradiação de 3 metros de espessura.
+                            </p>
+                        </div>
+                        <div class="border-t border-martian-border/60 pt-4 mt-auto">
+                            <span class="text-xs font-mono text-martian-sand/60">Proteção UV/GCR: <strong class="text-emerald-400">98% Eficiente</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modelo 2: Tubos de Lava Subterrâneos -->
+                <div class="martian-glass rounded-2xl overflow-hidden border border-martian-border flex flex-col">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=800&q=80" 
+                             alt="[Cavernas e Tubos de Lava Subterrâneos]" 
+                             class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-martian-dark/80 px-3 py-1 rounded text-xs font-mono text-martian-amber border border-martian-rust/40">
+                            SUBTERRÂNEO
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="heading-font text-xl font-bold text-white mb-2">Bases em Tubos de Lava</h3>
+                            <p class="text-martian-sand/70 text-sm mb-4 leading-relaxed">
+                                Adaptação de cavernas vulcânicas naturais pré-existentes. Módulos infláveis são expandidos no interior dos tubos, oferecendo proteção natural perfeita contra meteoritos e isolamento térmico estável.
+                            </p>
+                        </div>
+                        <div class="border-t border-martian-border/60 pt-4 mt-auto">
+                            <span class="text-xs font-mono text-martian-sand/60">Proteção UV/GCR: <strong class="text-emerald-400">99.9% Eficiente</strong></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modelo 3: Módulos Geodésicos de Polímero Hídrico -->
+                <div class="martian-glass rounded-2xl overflow-hidden border border-martian-border flex flex-col">
+                    <div class="h-48 overflow-hidden relative">
+                        <img src="https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?auto=format&fit=crop&w=800&q=80" 
+                             alt="[Domo Transparente com Camada de Água]" 
+                             class="w-full h-full object-cover hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-martian-dark/80 px-3 py-1 rounded text-xs font-mono text-martian-amber border border-martian-rust/40">
+                            ICE HOUSE / ÁGUA
+                        </span>
+                    </div>
+                    <div class="p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h3 class="heading-font text-xl font-bold text-white mb-2">Habitat Ice-House Híbrido</h3>
+                            <p class="text-martian-sand/70 text-sm mb-4 leading-relaxed">
+                                Estruturas que aproveitam o gelo extraído do subsolo. A água é um dos melhores bloqueadores de radiação de nêutrons e permite a entrada de iluminação natural para bem-estar psicológico.
+                            </p>
+                        </div>
+                        <div class="border-t border-martian-border/60 pt-4 mt-auto">
+                            <span class="text-xs font-mono text-martian-sand/60">Proteção UV/GCR: <strong class="text-emerald-400">94% Eficiente</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Camadas de Proteção Interativas -->
+            <div class="martian-glass p-8 rounded-2xl border border-martian-border">
+                <h3 class="heading-font text-2xl font-bold text-white mb-6 text-center">
+                    Anatomia de uma Parede de Habitat Marciano
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 bg-martian-dark/60 rounded-xl border border-martian-rust/30">
+                        <div class="w-10 h-10 rounded-full bg-martian-rust/30 text-martian-amber flex items-center justify-center mx-auto mb-3 font-bold">1</div>
+                        <h4 class="font-bold text-white mb-1">Concha Externa</h4>
+                        <p class="text-xs text-martian-sand/70">Regolito sinterizado de 2 a 3m. Bloqueia raios cósmicos e ventos abrasivos.</p>
+                    </div>
+                    <div class="p-4 bg-martian-dark/60 rounded-xl border border-martian-rust/30">
+                        <div class="w-10 h-10 rounded-full bg-martian-rust/30 text-martian-amber flex items-center justify-center mx-auto mb-3 font-bold">2</div>
+                        <h4 class="font-bold text-white mb-1">Isolamento Kevlar/Aerogel</h4>
+                        <p class="text-xs text-martian-sand/70">Camada de aerogel de sílica para prender o calor e suportar perfurações.</p>
+                    </div>
+                    <div class="p-4 bg-martian-dark/60 rounded-xl border border-martian-rust/30">
+                        <div class="w-10 h-10 rounded-full bg-martian-rust/30 text-martian-amber flex items-center justify-center mx-auto mb-3 font-bold">3</div>
+                        <h4 class="font-bold text-white mb-1">Barreira de Radiação</h4>
+                        <p class="text-xs text-martian-sand/70">Polietileno rico em hidrogênio para reter partículas secundárias de radiação.</p>
+                    </div>
+                    <div class="p-4 bg-martian-dark/60 rounded-xl border border-martian-rust/30">
+                        <div class="w-10 h-10 rounded-full bg-martian-rust/30 text-martian-amber flex items-center justify-center mx-auto mb-3 font-bold">4</div>
+                        <h4 class="font-bold text-white mb-1">Membrana Hermética</h4>
+                        <p class="text-xs text-martian-sand/70">Retém a pressão interna de 1 atm e a mistura N₂/O₂ respirável.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 3: ALIMENTAÇÃO E ESTUFAS -->
+    <section id="alimentacao" class="py-20 relative z-10 border-t border-martian-border/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="heading-font text-3xl sm:text-4xl font-bold text-white mb-4">
+                    <span class="text-martian-orange">03.</span> PRODUÇÃO DE ALIMENTOS & ESTUFAS
+                </h2>
+                <div class="h-1 w-20 bg-martian-rust mx-auto mb-6"></div>
+                <p class="text-martian-sand/80 text-lg">
+                    Transportar comida da Terra é inviável a longo prazo. A colônia deve ser autorrecuperável usando biotecnologia, estufas LED e fazendas verticais.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+                <div class="space-y-6">
+                    <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-martian-rust/20 rounded-lg text-martian-amber">
+                                <i data-lucide="droplets" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="heading-font text-lg font-bold text-white mb-1">Hidroponia e Aeroponia em LED</h3>
+                                <p class="text-martian-sand/70 text-sm">
+                                    Cultivo de plantas sem solo, alimentadas por soluções aquosas ricas em minerais e luzes LED otimizadas para fotossíntese rápida. Economiza até 95% de água.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-martian-rust/20 rounded-lg text-martian-amber">
+                                <i data-lucide="dna" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="heading-font text-lg font-bold text-white mb-1">Proteínas de Laboratório e Microalgas</h3>
+                                <p class="text-martian-sand/70 text-sm">
+                                    Biorreatores cultivam alga *Spirulina* (rica em proteínas e ferro) e carne cultivada em laboratório a partir de células-tronco sem consumo massivo de ração.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="martian-glass p-6 rounded-xl border border-martian-border">
+                        <div class="flex items-start gap-4">
+                            <div class="p-3 bg-martian-rust/20 rounded-lg text-martian-amber">
+                                <i data-lucide="flask-conical" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <h3 class="heading-font text-lg font-bold text-white mb-1">Tratamento do Solo Marciano</h3>
+                                <p class="text-martian-sand/70 text-sm">
+                                    O regolito bruto possui percloratos tóxicos. Ele passa por lavagem química com bactérias desnitrificantes e enriquecimento com composto biológico antes do plantio de batatas e legumes.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Imagem do Bioma / Estufa -->
+                <div class="relative rounded-2xl overflow-hidden border border-martian-border shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1585320806297-9794b3e4eeae?auto=format&fit=crop&w=1000&q=80" 
+                         alt="[Estufa de Agricultura Hidropônica em Marte]" 
+                         class="w-full h-[480px] object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-martian-dark via-transparent to-transparent"></div>
+                    <div class="absolute bottom-6 left-6 right-6 martian-glass p-4 rounded-xl border border-martian-border">
+                        <h4 class="font-bold text-white heading-font mb-1">Estufa Hidropônica Unidade Alfa</h4>
+                        <p class="text-xs text-martian-sand/80">Produção estimada: 1.2 toneladas de biomassa comestível por Sol.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Calculadora Nutricional da Colônia -->
+            <div class="martian-glass p-8 rounded-2xl border border-martian-border max-w-4xl mx-auto">
+                <h3 class="heading-font text-2xl font-bold text-white mb-2 text-center">Simulador de Ração Diária da Colônia</h3>
+                <p class="text-center text-martian-sand/70 text-sm mb-8">Defina a quantidade de colonos para calcular a demanda diária da estufa.</p>
+
+                <div class="flex flex-col md:flex-row items-center justify-center gap-8 mb-8">
+                    <div class="flex items-center gap-4">
+                        <label for="colony-size" class="font-mono text-sm text-martian-amber">Número de Colonos:</label>
+                        <input type="number" id="colony-size" value="50" min="1" max="1000" 
+                               class="bg-martian-dark border border-martian-rust rounded px-4 py-2 text-white font-mono w-28 text-center focus:outline-none focus:border-martian-amber"
+                               oninput="calculateRations()">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center font-mono">
+                    <div class="bg-martian-dark/60 p-4 rounded-xl border border-martian-border">
+                        <span class="text-xs text-martian-sand/60 block mb-1">CALORIAS DIÁRIAS</span>
+                        <span id="cal-val" class="text-2xl font-bold text-martian-amber">125,000</span> kcal
+                    </div>
+                    <div class="bg-martian-dark/60 p-4 rounded-xl border border-martian-border">
+                        <span class="text-xs text-martian-sand/60 block mb-1">ÁGUA DE CULTIVO</span>
+                        <span id="water-val" class="text-2xl font-bold text-martian-orange">2,500</span> L/dia
+                    </div>
+                    <div class="bg-martian-dark/60 p-4 rounded-xl border border-martian-border">
+                        <span class="text-xs text-martian-sand/60 block mb-1">O2 GERADO PELAS PLANTAS</span>
+                        <span id="o2-val" class="text-2xl font-bold text-emerald-400">42.5</span> kg/dia
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO 4: DESIGN DE TRAJES -->
+    <section id="trajes" class="py-20 bg-martian-card/30 relative z-10 border-t border-martian-border/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="heading-font text-3xl sm:text-4xl font-bold text-white mb-4">
+                    <span class="text-martian-orange">04.</span> DESIGN DE TRAJES ESPACIAIS
+                </h2>
+                <div class="h-1 w-20 bg-martian-rust mx-auto mb-6"></div>
+                <p class="text-martian-sand/80 text-lg">
+                    Roupas em Marte variam radicalmente entre o ambiente protegido do habitat e o deserto hostil do exterior.
+                </p>
+            </div>
+
+            <!-- Interativo: Alternador de Traje -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <!-- Painel de Seleção -->
+                <div class="lg:col-span-5 space-y-4">
+                    <button onclick="switchSuit('indoor')" id="btn-indoor" 
+                            class="w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-amber bg-martian-red/20">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="heading-font text-xl font-bold text-white">Traje de Ambiente Interno (IVA)</h3>
+                            <i data-lucide="home" class="w-6 h-6 text-martian-amber"></i>
+                        </div>
+                        <p class="text-sm text-martian-sand/70">
+                            Focado em conforto, controle térmico, biosensores de saúde contínuos e ergonomia leve sem necessidade de pressurização rígida.
+                        </p>
+                    </button>
+
+                    <button onclick="switchSuit('outdoor')" id="btn-outdoor" 
+                            class="w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-border opacity-70 hover:opacity-100">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="heading-font text-xl font-bold text-white">Traje de Atividade Extraveicular (EVA)</h3>
+                            <i data-lucide="shield-alert" class="w-6 h-6 text-martian-orange"></i>
+                        </div>
+                        <p class="text-sm text-martian-sand/70">
+                            Armadura biomecânica pressurizada com contra-pressão mecânica (MCP), revestimento dourado no visor antirradiação e mochilas de suporte de vida (PLSS).
+                        </p>
+                    </button>
+                </div>
+
+                <!-- Detalhamento Visuogeométrico do Traje Selecionado -->
+                <div class="lg:col-span-7 martian-glass p-8 rounded-2xl border border-martian-border min-h-[450px] flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between border-b border-martian-border/80 pb-4 mb-6">
+                            <span id="suit-tag" class="font-mono text-xs text-martian-amber bg-martian-rust/30 px-3 py-1 rounded">CATEGORIA: TRAJE INTERNO</span>
+                            <span id="suit-weight" class="font-mono text-xs text-martian-sand/60">PESO: 2.5 KG</span>
+                        </div>
+
+                        <h3 id="suit-title" class="heading-font text-2xl font-bold text-white mb-4">Macacão Biométrico Biosuit Internal</h3>
+                        <p id="suit-desc" class="text-martian-sand/80 leading-relaxed mb-6">
+                            Desenvolvido com tecidos inteligentes transpiráveis de fibra de prata. Monitora batimentos cardíacos, níveis de hidratação e temperatura corporal dos colonos enquanto se deslocam nos domos.
+                        </p>
+
+                        <div class="space-y-3" id="suit-features">
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                                <span class="text-sm text-martian-sand">Fibras com propriedades antibacterianas para uso prolongado.</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                                <span class="text-sm text-martian-sand">Entradas Magnéticas para acoplamento rápido a ferramentas operacionais.</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                                <span class="text-sm text-martian-sand">Redução do atrito para evitar atrofias neuromusculares em gravidade reduzida (0.38g).</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-4 border-t border-martian-border/50 flex justify-between items-center text-xs font-mono text-martian-sand/60">
+                        <span>RESISTÊNCIA A RADIAÇÃO: <strong id="suit-rad" class="text-amber-400">MODERADA (INTERNA)</strong></span>
+                        <span>MOBILIDADE: <strong id="suit-mob" class="text-emerald-400">100% EXCELENTE</strong></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="martian-glass border-t border-martian-border mt-auto py-12 relative z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <i data-lucide="globe" class="w-6 h-6 text-martian-orange"></i>
+                <span class="heading-font font-bold text-white text-lg">PROJETO MARTE ARES</span>
+            </div>
+
+            <p class="text-xs text-martian-sand/60 text-center md:text-left">
+                © 2026 - Central de Colonização e Engenharia Planetária. Desenvolvido para fins educativos e científicos.
+            </p>
+
+            <div class="flex space-x-4">
+                <a href="#" class="text-martian-sand/60 hover:text-martian-amber transition"><i data-lucide="github" class="w-5 h-5"></i></a>
+                <a href="#" class="text-martian-sand/60 hover:text-martian-amber transition"><i data-lucide="share-2" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Lógica JavaScript -->
+    <script>
+        // Inicializar Ícones do Lucide
+        lucide.createIcons();
+
+        // Menu Mobile Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Simulação de Tempestade de Poeira
+        let isStormActive = false;
+        function toggleStormSim() {
+            const overlay = document.getElementById('storm-overlay');
+            const img = document.getElementById('storm-img');
+            isStormActive = !isStormActive;
+
+            if (isStormActive) {
+                overlay.classList.remove('opacity-0');
+                overlay.classList.add('opacity-100');
+                img.classList.add('filter', 'sepia', 'brightness-50');
+            } else {
+                overlay.classList.remove('opacity-100');
+                overlay.classList.add('opacity-0');
+                img.classList.remove('filter', 'sepia', 'brightness-50');
+            }
+        }
+
+        // Calculadora de Ração da Colônia
+        function calculateRations() {
+            const colonists = parseInt(document.getElementById('colony-size').value) || 0;
+            
+            const calories = (colonists * 2500).toLocaleString('pt-BR');
+            const water = (colonists * 50).toLocaleString('pt-BR');
+            const o2 = (colonists * 0.85).toFixed(1);
+
+            document.getElementById('cal-val').innerText = calories;
+            document.getElementById('water-val').innerText = water;
+            document.getElementById('o2-val').innerText = o2;
+        }
+
+        // Alternador de Trajes (Interno vs Externo)
+        function switchSuit(type) {
+            const btnIndoor = document.getElementById('btn-indoor');
+            const btnOutdoor = document.getElementById('btn-outdoor');
+            
+            const tag = document.getElementById('suit-tag');
+            const weight = document.getElementById('suit-weight');
+            const title = document.getElementById('suit-title');
+            const desc = document.getElementById('suit-desc');
+            const features = document.getElementById('suit-features');
+            const rad = document.getElementById('suit-rad');
+            const mob = document.getElementById('suit-mob');
+
+            if (type === 'indoor') {
+                btnIndoor.className = "w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-amber bg-martian-red/20";
+                btnOutdoor.className = "w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-border opacity-70 hover:opacity-100";
+
+                tag.innerText = "CATEGORIA: TRAJE INTERNO (IVA)";
+                weight.innerText = "PESO: 2.5 KG";
+                title.innerText = "Macacão Biométrico Biosuit Internal";
+                desc.innerText = "Desenvolvido com tecidos inteligentes transpiráveis de fibra de prata. Monitora batimentos cardíacos, níveis de hidratação e temperatura corporal dos colonos enquanto se deslocam nos domos.";
+
+                features.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Fibras com propriedades antibacterianas para uso prolongado.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Entradas Magnéticas para acoplamento rápido a ferramentas operacionais.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-martian-amber shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Redução do atrito para evitar atrofias neuromusculares em gravidade reduzida (0.38g).</span>
+                    </div>
+                `;
+
+                rad.innerText = "MODERADA (INTERNA)";
+                rad.className = "text-amber-400";
+                mob.innerText = "100% EXCELENTE";
+                mob.className = "text-emerald-400";
+            } else {
+                btnOutdoor.className = "w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-amber bg-martian-red/20";
+                btnIndoor.className = "w-full text-left p-6 rounded-2xl border transition duration-300 martian-glass border-martian-border opacity-70 hover:opacity-100";
+
+                tag.innerText = "CATEGORIA: TRAJE EXTERNO (EVA)";
+                weight.innerText = "PESO: 48 KG (18 KG EM MARTE)";
+                title.innerText = "Exotraje de Superfície Mark-V";
+                desc.innerText = "Armadura pressurizada de alta resistência revestida com fibra de titânio, Mylar térmico e polietileno injetado. Projetada para resistir até -120°C e tempestades violentas de poeira.";
+
+                features.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-martian-orange shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Capacete com visor banhado a ouro 24k e HUD com realidade aumentada.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-martian-orange shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Mochila PLSS com até 8 horas de oxigênio de emergência e reciclagem de O₂.</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i data-lucide="shield-check" class="w-5 h-5 text-martian-orange shrink-0"></i>
+                        <span class="text-sm text-martian-sand">Camada externa autorregenerativa contra perfurações de micrometeoritos.</span>
+                    </div>
+                `;
+
+                rad.innerText = "MÁXIMA (ESCUDO GCR/SPE)";
+                rad.className = "text-emerald-400";
+                mob.innerText = "75% RESTRITA";
+                mob.className = "text-amber-400";
+            }
+
+            // Re-renderizar ícones inseridos dinamicamente
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
